@@ -1,14 +1,50 @@
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
-#@tf.function()
+def loading_data():
+    # load the data into a data-framefrom the given path
+    df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv', sep=';')
+
+    #mormalizing the cols of my dataframe between[0,1]
+    df=(df-df.min())/(df.max()-df.min())
+
+    #get the median and the shape of the dataframe
+    median =df['quality'].median()
+    (rows,cols) = df.shape
+    #shuffle the dataset
+    df = df.sample(frac=1).reset_index(drop=True)
+
+    #split in in input and target and create a combined tensor
+    inputs = df.drop(['quality'],axis=1)
+    targets = df['quality']
+    full_ds = tf.data.Dataset.from_tensor_slices((inputs,targets))
+
+    #split the dataset into training, validation and testing
+    train_ds = full_ds.take(int(0.6*rows))
+    remaining = full_ds.skip(int(0.6*rows))
+    valid_ds = remaining.take(int(0.2*rows))
+    test_ds = remaining.skip(int(0.2*rows))
+
+    # apply preprocessing to the datasets
+    train_ds = train_ds.apply(prepare_data)
+    test_ds = test_ds.apply(prepare_data)
+    valid_ds = valid_ds.apply(prepare_data)
+
+    return train_ds,test_ds,valid_ds
+
+@tf.function()
 def make_binary(input,threshold):
   """
 
   """
-  encoded_input = input
-  return encoded_input
+  if input >= threshold:
+      input = tf.constant([1],)
+  else:
+      input = tf.constant([0])
+
+  return input
 
 
 def prepare_data(ds):
@@ -21,7 +57,7 @@ def prepare_data(ds):
   """
 
   # make targets binary
-  ds = ds.map(lambda feature, target: (feature, make_binary(target,6)))
+  ds = ds.map(lambda feature, target: (feature, make_binary(target,0.6)))
 
   # cast features and targets to float32
   ds = ds.map(lambda feature, target: (tf.cast(feature, tf.float32),tf.cast(target,tf.float32)))
@@ -32,10 +68,8 @@ def prepare_data(ds):
   ds = ds.shuffle(100)
   ds = ds.batch(32)
   ds = ds.prefetch(20)
-
   return ds
 
-#@tf.function
 def train_step(model, input, target, loss_function, optimizer):
   """
   Performs a forward and backward pass for  one dataponit of our training set

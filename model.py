@@ -17,12 +17,12 @@ class MyModel(tf.keras.Model):
     super(MyModel, self).__init__()
 
     # two hidden layers with each 256 perceptrons and sigmoid as activation function
-    self.dense_h1 = tf.keras.layers.Dense(32, kernel_regularizer=regulization,activation=tf.nn.sigmoid)
+    self.dense_h1 = tf.keras.layers.Dense(16, kernel_regularizer=regulization,activation=tf.nn.sigmoid)
     self.dense_h2 = tf.keras.layers.Dense(8, kernel_regularizer=regulization,activation=tf.nn.sigmoid)
     #self.dense_h3 = tf.keras.layers.Dense(2, kernel_regularizer=regulization,activation=tf.nn.sigmoid)
 
     # our output layer with 10 perceptrons (our output categories) and softmax activation
-    self.dense_o = tf.keras.layers.Dense(1, kernel_regularizer=regulization,activation=tf.nn.sigmoid)
+    self.dense_o = tf.keras.layers.Dense(1, kernel_regularizer=None,activation=tf.nn.sigmoid)
 
   def call(self, inputs):
     """
