@@ -21,7 +21,7 @@
 
 + Analyse and Interpretation: 
   - SGD: Stochastic Gradient decent **does not easily find an optimum**. Our loss-surface might be very shallow with only very few valleys. Regularization and a 50% dropout does not help with it. If we would train for more epochs, we might get lucky and find the a local optimum. Then we would get a similar accuracy, as with Adam.
-  - Adam seems to **speed up the training process** a lot. But in our case we **get some overfitting** and not the best general accuracy for Adam alone. 
+  - Adam seems to **speed up the training process** a lot. But in our case we **got some overfitting** and not the best general accuracy for Adam alone. 
   - 'l1_l2' regulization: When combined with Adam we can see an increase of the test dataset accuracy (**generalization of our model**), but very similar training and validation losses.
   - Applying a 50% dropout rate to the model, while using Adam, seems to **solve and avoid our overfitting problem**. This is very logical, because we always drop some parameters which fit the specific data points. 
  - **Final: Adam,'l1_l2',Dropout: When combining all three optimizations, we get a model, which has a very high accuracy for the validation and our testing datasets and avoiding overfitting.**
