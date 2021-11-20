@@ -4,24 +4,32 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def loading_data():
+    """
+    Loading and preprocessing the data.
+
+        Results:
+            train_ds,test_ds,valid_ds: the preprocessed datasets
+            median: median of our dataframe
+    """
+
     # load the data into a data-framefrom the given path
     df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv', sep=';')
 
-    #mormalizing the cols of my dataframe between[0,1]
-    df=(df-df.min())/(df.max()-df.min())
+    # normalizing the cols of my dataframe
+    df = (df-df.mean())/df.std()
 
-    #get the median and the shape of the dataframe
-    median =df['quality'].median()
+    # get the shape of the dataframe
     (rows,cols) = df.shape
-    #shuffle the dataset
+
+    # shuffle the dataset
     df = df.sample(frac=1).reset_index(drop=True)
 
-    #split in in input and target and create a combined tensor
+    # split ip into input and target and create a combined tensor
     inputs = df.drop(['quality'],axis=1)
     targets = df['quality']
     full_ds = tf.data.Dataset.from_tensor_slices((inputs,targets))
 
-    #split the dataset into training, validation and testing
+    # split the dataset into training, validation and testing dataset
     train_ds = full_ds.take(int(0.6*rows))
     remaining = full_ds.skip(int(0.6*rows))
     valid_ds = remaining.take(int(0.2*rows))
@@ -32,52 +40,61 @@ def loading_data():
     test_ds = test_ds.apply(prepare_data)
     valid_ds = valid_ds.apply(prepare_data)
 
-    return train_ds,test_ds,valid_ds
+    return train_ds,valid_ds,test_ds,
 
 @tf.function()
 def make_binary(input,threshold):
   """
-
+  Makes our numerical tensor, binary on the basis of our threshhold.
+    Args:
+        input: input tensor (single number)
+        threshold: our threshold
+    Results:
+        output: an binary tensor
   """
-  if input >= threshold:
-      input = tf.constant([1],)
-  else:
-      input = tf.constant([0])
 
-  return input
+  if input >= threshold:
+      output = tf.constant([1])
+  else:
+      output = tf.constant([0])
+
+  return output
 
 
 def prepare_data(ds):
   """
   Preparing our data for our model.
-    Parameters:
+
+    Args:
       ds: the dataset we want to preprocess
-    Returns:
+    Results:
       ds: preprocessed dataset
   """
 
-  # make targets binary
-  ds = ds.map(lambda feature, target: (feature, make_binary(target,0.6)))
+  # make the targets binary, threshhold is the median of our dataset
+  ds = ds.map(lambda feature, target: (feature, make_binary(target,0.4507)))
 
   # cast features and targets to float32
   ds = ds.map(lambda feature, target: (tf.cast(feature, tf.float32),tf.cast(target,tf.float32)))
+
   # cache the elements
   ds = ds.cache()
 
   # shuffle, batch, prefetch our dataset
-  ds = ds.shuffle(100)
-  ds = ds.batch(32)
+  ds = ds.shuffle(200)
+  ds = ds.batch(64)
   ds = ds.prefetch(20)
   return ds
+
 
 def train_step(model, input, target, loss_function, optimizer):
   """
   Performs a forward and backward pass for  one dataponit of our training set
 
-    Parameters:
+    Args:
       model: our created MLP model
-      input:
-      target:
+      input: our input
+      target: our target
       loss_funcion: function we used for calculating our loss
       optimizer: our optimizer used for packpropagation
     Results:
@@ -106,14 +123,15 @@ def test(model, test_data, loss_function):
   Test our MLP, by going through our testing dataset,
   performing a forward pass and calculating loss and accuracy
 
-    Parameters:
+    Args:
       model: our created MLP model
       test_data: our preprocessed test dataset
       loss_funcion: function we used for calculating our loss
     Results:
-
-
+        loss: our mean loss for this epoch
+        accuracy: our mean accuracy for this epoch
   """
+
   # initializing lists for accuracys and loss
   accuracy_aggregator = []
   loss_aggregator = []
@@ -140,20 +158,31 @@ def test(model, test_data, loss_function):
 
   return loss, accuracy
 
-def visualize(train_loss,test_loss,accuracy):
-  """
-  Displays training and testing loss as well as accuracy per epoch each in a line plot.
+
+def visualize(train_losses,valid_losses,valid_accuracies, test_accuracies):
+    """
+    Displays the losses and accuracies from the different models in a plot-grid.
 
     Args:
-      train_loss = mean training loss per epoch
-      test_loss = mean testing loss per epoch
-      accuracy = mean accuracy (testing dataset) per epoch
-  """
+      train_losses = mean training losses per epoch
+      valid_losses = mean testing losses per epoch
+      valid_accuracies = mean accuracies (testing dataset) per epoch
+      test_accuracies = single mean accuracy for our unseen test_ds
+    """
 
-  fig, axes = plt.subplots(2)
-  line_1 = axes[0].plot(train_loss,label="  Train Loss")
-  line_2 = axes[0].plot(test_loss, label = "  Test Loss")
-  line_3 = axes[1].plot(accuracy, label = "  Test Accuracy")
-  plt.xlabel("  Training Epoch")
-  axes[0].legend()
-  axes[1].legend()
+    titles = ["SGD","SGD_l1-l2","SGD_drop-0.5","SGD_l1-l2_drop-0.5","Adam","Adam_l1-l2","Adam_drop-0.5","Adam_l1-l2_drop-0.5",]
+    fig, axs = plt.subplots(2, 4)
+    fig.set_size_inches(13, 6)
+
+    #making a grid with subplots
+    for i in range(2):
+        for j in range(4):
+            axs[i,j].plot(train_losses[i*4+j])
+            axs[i,j].plot(valid_losses[i*4+j])
+            axs[i,j].plot(valid_accuracies[i*4+j])
+            axs[i,j].sharex(axs[0,0])
+            axs[i,j].set_title(titles[i*4+j]+" \nTestSet Accuracy: "+str(round(test_accuracies[i*4+j],4)))
+
+    fig.legend([" Train_ds loss"," Valid_ds loss"," Accuracy"])
+    plt.xlabel("Training epoch")
+    fig.tight_layout()

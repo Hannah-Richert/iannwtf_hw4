@@ -1,4 +1,5 @@
 import tensorflow as tf
+from layer import MyDense
 
 
 class MyModel(tf.keras.Model):
@@ -9,63 +10,30 @@ class MyModel(tf.keras.Model):
       init: constructor of our model
       call: performs forward pass of our model
   """
-  def __init__(self,regulization):
+
+  def __init__(self,kernel_regularizer=None,dropout=0):
     """
-    Constructs our MLP model with three fully connected layers.
+    Constructs our MLP model with three dense layers.
+
+        Args:
+            kernel_regularizer: our regularizer, which will be applied to all layers
+            dropout: dropout_rate for intermediate outputs between the layers
     """
 
     super(MyModel, self).__init__()
 
-    # two hidden layers with each 256 perceptrons and sigmoid as activation function
-    self.dense_h1 = tf.keras.layers.Dense(16, kernel_regularizer=regulization,activation=tf.nn.sigmoid)
-    self.dense_h2 = tf.keras.layers.Dense(8, kernel_regularizer=regulization,activation=tf.nn.sigmoid)
-    #self.dense_h3 = tf.keras.layers.Dense(2, kernel_regularizer=regulization,activation=tf.nn.sigmoid)
+    self.dense_h1 = MyDense(32, kernel_regularizer,dropout,activation=tf.nn.sigmoid)
+    self.dense_h2 = MyDense(8, kernel_regularizer,dropout,activation=tf.nn.sigmoid)
+    self.dense_out = MyDense(1,kernel_regularizer,0,activation=tf.nn.sigmoid)
 
-    # our output layer with 10 perceptrons (our output categories) and softmax activation
-    self.dense_o = tf.keras.layers.Dense(1, kernel_regularizer=None,activation=tf.nn.sigmoid)
+  def set_training(self, is_training):
+      """
+      Setter for the training variables of our layers.
+      """
 
-  def call(self, inputs):
-    """
-    Performs a forward step in our MLP
-
-      Args:
-        inputs: our preprocessed input data, we send through our model
-      Results:
-        output: the predicted output of our input data
-    """
-    # first hidden layer
-    x = self.dense_h1(inputs)
-
-    # second hidden layer
-    x = self.dense_h2(x)
-    #x = self.dense_h3(x)
-
-    # output layer
-    output = self.dense_o(x)
-
-    return output
-
-class MyModelRegu(tf.keras.Model):
-  """
-  Our own custon MLP model, which inherits from the keras.Model class
-
-    Functions:
-      init: constructor of our model
-      call: performs forward pass of our model
-  """
-  def __init__(self):
-    """
-    Constructs our MLP model with three fully connected layers.
-    """
-
-    super(MyModelRegu, self).__init__()
-
-    # two hidden layers with each 256 perceptrons and sigmoid as activation function
-    self.dense_h1 = tf.keras.layers.Dense(32,kernel_regularizer='l1', activation=tf.nn.sigmoid)
-    self.dense_h2 = tf.keras.layers.Dense(16,kernel_regularizer='l1', activation=tf.nn.sigmoid)
-
-    # our output layer with 10 perceptrons (our output categories) and softmax activation
-    self.dense_o = tf.keras.layers.Dense(1,kernel_regularizer='l1', activation=tf.nn.sigmoid)
+      self.dense_h1.set_training2(is_training)
+      self.dense_h2.set_training2(is_training)
+      self.dense_out.set_training2(is_training)
 
   def call(self, inputs):
     """
@@ -76,13 +44,9 @@ class MyModelRegu(tf.keras.Model):
       Results:
         output: the predicted output of our input data
     """
-    # first hidden layer
+    
     x = self.dense_h1(inputs)
-
-    # second hidden layer
     x = self.dense_h2(x)
-
-    # output layer
-    output = self.dense_o(x)
+    output = self.dense_out(x)
 
     return output

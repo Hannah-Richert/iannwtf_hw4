@@ -2,14 +2,21 @@ import tensorflow as tf
 from util import train_step, test, visualize
 
 
-def classify(model,optimizer,epochs,train_ds,test_ds,valid_ds):
+def classify(model,optimizer,num_epochs,train_ds,valid_ds):
+    """
+    Trains and tests our predefined model.
+        Args:
+            model: our untrained model
+            optimizer: optimizer for the model
+            num_epochs: number of training epochs
+            train_ds: our training dataset
+            valid_ds our validation set for testing and regulating hyperparameters
+        Results:
+            result: list with losses and accuracies
+            model: our trained MLP model
+    """
 
     tf.keras.backend.clear_session()
-
-    # Hyperparameters
-    num_epochs = epochs
-    learning_rate = 0.1
-
 
     # Initialize the loss: categorical cross entropy
     cross_entropy_loss = tf.keras.losses.BinaryCrossentropy()
@@ -20,7 +27,8 @@ def classify(model,optimizer,epochs,train_ds,test_ds,valid_ds):
     test_accuracies = []
 
     # Testing on our test_ds once before we begin
-    test_loss, test_accuracy = test(model, test_ds, cross_entropy_loss)
+    model.set_training(False)
+    test_loss, test_accuracy = test(model, valid_ds, cross_entropy_loss)
     test_losses.append(test_loss)
     test_accuracies.append(test_accuracy)
 
@@ -28,12 +36,14 @@ def classify(model,optimizer,epochs,train_ds,test_ds,valid_ds):
     train_loss, _ = test(model, train_ds, cross_entropy_loss)
     train_losses.append(train_loss)
 
-    # Training our modelfor num_epochs epochs.
+    # Training our model for num_epochs epochs.
     for epoch in range(num_epochs):
         print(f'Epoch: {str(epoch)} starting with accuracy {test_accuracies[-1]}')
 
         # training (and calculating loss while training)
         epoch_loss_agg = []
+        model.set_training(True)
+
         for input,target in train_ds:
             train_loss = train_step(model, input, target, cross_entropy_loss, optimizer)
             epoch_loss_agg.append(train_loss)
@@ -41,11 +51,12 @@ def classify(model,optimizer,epochs,train_ds,test_ds,valid_ds):
         # track training loss
         train_losses.append(tf.reduce_mean(epoch_loss_agg))
 
+
         # testing our model in each epoch to track accuracy and test loss
-        test_loss, test_accuracy = test(model, test_ds, cross_entropy_loss)
+        model.set_training(False)
+        test_loss, test_accuracy = test(model, valid_ds, cross_entropy_loss)
         test_losses.append(test_loss)
         test_accuracies.append(test_accuracy)
 
-    valid_loss,valid_accuracy = test(model,valid_ds, cross_entropy_loss)
-    results = [train_losses,test_losses,test_accuracies,valid_loss,valid_accuracy]
-    return results
+    results = [train_losses,test_losses,test_accuracies]
+    return results, model
