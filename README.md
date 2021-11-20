@@ -12,6 +12,8 @@
   - We applied **dropout** between all layers with a rate of **50%**.
   - We plotted all resluts in a grid, seen below.
 
+BE AWARE: Our dataset has only 1599 dataponts, it is very small. We tested all models with the exact same shuffled dataset, but instaltiated our layers with random weights and biases. Therefore the results are not steady.
+
 # Results:
 
 + 20 training epochs:
