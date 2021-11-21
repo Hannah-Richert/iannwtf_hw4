@@ -22,9 +22,9 @@ class MyModel(tf.keras.Model):
 
     super(MyModel, self).__init__()
 
-    self.dense_h1 = MyDense(32, kernel_regularizer,dropout,activation=tf.nn.sigmoid)
+    self.dense_h1 = MyDense(32, kernel_regularizer,0,activation=tf.nn.sigmoid)
     self.dense_h2 = MyDense(8, kernel_regularizer,dropout,activation=tf.nn.sigmoid)
-    self.dense_out = MyDense(1,kernel_regularizer,0,activation=tf.nn.sigmoid)
+    self.dense_out = MyDense(1,kernel_regularizer,dropout,activation=tf.nn.sigmoid)
 
   def set_training(self, is_training):
       """

@@ -44,7 +44,7 @@ def loading_data():
 @tf.function()
 def make_binary(input,threshold):
   """
-  Makes our numerical tensor, binary on the basis of our threshhold.
+  Makes our numerical tensor binary on the basis of our threshhold.
     Args:
         input: input tensor (single number)
         threshold: our threshold
