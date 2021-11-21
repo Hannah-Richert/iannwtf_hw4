@@ -5,7 +5,7 @@
   - We **normalized** the dataset (the pandas dataframe).
   - We made the targets **binary** based on the **median** of all quality ratings.
   - We set the **learning_rate** to **0.05**.
-  - WE trained and analysed different models for **20 epochs**.
+  - WE trained different models for **20 epochs**.
   - We trained **8 different models** under with different conditions, and analysed them.
   - We used first **SGD** and later the **Adam** as **optimizer** with their standart parameters.
   - We applied **"l1_l2"** kernel **regularization** to all layers (with standart parameters).
