@@ -17,7 +17,7 @@ BE AWARE: Our dataset has only 1599 dataponts, it is very small. We tested all m
 # Results:
 
 + 20 training epochs:
-+ ![20_epochs_7865](https://user-images.githubusercontent.com/93341845/142777166-1669523f-799f-4a4f-9255-e9031d8395a7.png)
+![20_epochs_7865](https://user-images.githubusercontent.com/93341845/142777166-1669523f-799f-4a4f-9255-e9031d8395a7.png)
 
 
 
