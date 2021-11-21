@@ -26,7 +26,7 @@ def classify(model,optimizer,num_epochs,train_ds,valid_ds):
     valid_losses = []
     valid_accuracies = []
 
-    # testing on our test_ds once before we begin
+    # testing on our valid_ds once before we begin
     model.set_training(False)
     valid_loss, valid_accuracy = test(model, valid_ds, cross_entropy_loss)
     valid_losses.append(valid_loss)
@@ -52,7 +52,7 @@ def classify(model,optimizer,num_epochs,train_ds,valid_ds):
         train_losses.append(tf.reduce_mean(epoch_loss_agg))
 
 
-        # testing our model in each epoch to track accuracy and test loss
+        # testing our model in each epoch to track accuracy and loss on the validation set
         model.set_training(False)
         valid_loss, valid_accuracy = test(model, valid_ds, cross_entropy_loss)
         valid_losses.append(valid_loss)
