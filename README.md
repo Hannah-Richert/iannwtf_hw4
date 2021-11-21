@@ -28,5 +28,5 @@ BE AWARE: Our dataset has only 1599 dataponts, it is very small. We tested all m
   - Applying a 50% dropout rate to the model, while using Adam, seems to **solve and avoid our overfitting problem**. This is very logical, because we always drop some parameters which fit the specific data points. 
  - **Final: Adam, 'l1_l2', Dropout: When combining all three optimizations, we get a model, which has a very high accuracy for the validation and our testing datasets and avoid overfitting.**
 
-Fazit: The most impact on the training process had the optimizer Adam, but Dropout and 'l1_l2' kernel regulization helped with the finetuning and to overfitting.
+Fazit: The greatest impact on the training process had the optimizer Adam, but Dropout and 'l1_l2' kernel regulization helped with the finetuning and to overfitting.
 
