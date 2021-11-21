@@ -12,7 +12,7 @@ def loading_data():
             median: median of our dataframe
     """
 
-    # load the data into a data-framefrom the given path
+    # load the data into a pandas dataframe from the given path
     df = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv', sep=';')
 
     # normalizing the cols of my dataframe
@@ -174,7 +174,7 @@ def visualize(train_losses,valid_losses,valid_accuracies, test_accuracies):
     fig, axs = plt.subplots(2, 4)
     fig.set_size_inches(13, 6)
 
-    #making a grid with subplots
+    # making a grid with subplots
     for i in range(2):
         for j in range(4):
             axs[i,j].plot(train_losses[i*4+j])

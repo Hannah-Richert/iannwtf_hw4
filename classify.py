@@ -1,5 +1,5 @@
 import tensorflow as tf
-from util import train_step, test, visualize
+from util import train_step, test
 
 
 def classify(model,optimizer,num_epochs,train_ds,valid_ds):
@@ -18,27 +18,27 @@ def classify(model,optimizer,num_epochs,train_ds,valid_ds):
 
     tf.keras.backend.clear_session()
 
-    # Initialize the loss: categorical cross entropy
+    # initialize the loss: categorical cross entropy
     cross_entropy_loss = tf.keras.losses.BinaryCrossentropy()
 
-    # Initialize lists for later visualization.
+    # initialize lists for later visualization.
     train_losses = []
-    test_losses = []
-    test_accuracies = []
+    valid_losses = []
+    valid_accuracies = []
 
-    # Testing on our test_ds once before we begin
+    # testing on our test_ds once before we begin
     model.set_training(False)
-    test_loss, test_accuracy = test(model, valid_ds, cross_entropy_loss)
-    test_losses.append(test_loss)
-    test_accuracies.append(test_accuracy)
+    valid_loss, valid_accuracy = test(model, valid_ds, cross_entropy_loss)
+    valid_losses.append(valid_loss)
+    valid_accuracies.append(valid_accuracy)
 
     # Testing on our train_ds once before we begin
     train_loss, _ = test(model, train_ds, cross_entropy_loss)
     train_losses.append(train_loss)
 
-    # Training our model for num_epochs epochs.
+    # training our model for num_epochs epochs.
     for epoch in range(num_epochs):
-        print(f'Epoch: {str(epoch)} starting with accuracy {test_accuracies[-1]}')
+        print(f'Epoch: {str(epoch)} starting with accuracy {valid_accuracies[-1]}')
 
         # training (and calculating loss while training)
         epoch_loss_agg = []
@@ -54,9 +54,9 @@ def classify(model,optimizer,num_epochs,train_ds,valid_ds):
 
         # testing our model in each epoch to track accuracy and test loss
         model.set_training(False)
-        test_loss, test_accuracy = test(model, valid_ds, cross_entropy_loss)
-        test_losses.append(test_loss)
-        test_accuracies.append(test_accuracy)
+        valid_loss, valid_accuracy = test(model, valid_ds, cross_entropy_loss)
+        valid_losses.append(valid_loss)
+        valid_accuracies.append(valid_accuracy)
 
-    results = [train_losses,test_losses,test_accuracies]
+    results = [train_losses,valid_losses,valid_accuracies]
     return results, model

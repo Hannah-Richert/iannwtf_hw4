@@ -1,16 +1,13 @@
 import tensorflow as tf
-import os
 import matplotlib.pyplot as plt
 from util import visualize, loading_data, test
 from model import MyModel
 from classify import classify
-from layer import MyDense
 
 
 if __name__ == "__main__":
-    #os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
-    # Hyperparameters
+    # hyperparameters
     epochs = 20
     learning_rate = 0.05
 
@@ -38,8 +35,8 @@ if __name__ == "__main__":
         train_losses.append(result[0])
         valid_losses.append(result[1])
         valid_accuracies.append(result[2])
-        
-    # after adjusting our hyper parameters, checking the models on our unseen test_ds
+
+    # after adjusting our hyperparameters, checking the final models on our unseen test_ds
     for model in trained_models:
         _, accuracy = loss,accuracy = test(model,test_ds,tf.keras.losses.BinaryCrossentropy())
         test_accuracies.append(accuracy.numpy())
