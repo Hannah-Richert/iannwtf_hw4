@@ -8,7 +8,7 @@
   - We trained and analysed the models for **20 and 200 epochs**.
   - We trained **8 different models** under with different conditions, and analysed them.
   - We used first **SGD** and later the **Adam** as **optimizer** with their standart parameters.
-  - We applied **"l1_l2"** kernel **regularization** to all layers.
+  - We applied **"l1_l2"** kernel **regularization** to all layers (with standart parameters).
   - We applied **dropout** between all layers with a rate of **50%**.
   - We plotted all resluts in a grid, seen below.
 
@@ -24,7 +24,7 @@ BE AWARE: Our dataset has only 1599 dataponts, it is very small. We tested all m
 + Analyse and Interpretation: 
   - SGD: Stochastic Gradient decent **does not easily find an optimum**. Our loss-surface might be very shallow with only very few valleys. Regularization and a 50% dropout does not help with it. If we would train for more epochs, we might get lucky and find the a local optimum. Then we would get a similar accuracy, as with Adam.
   - Adam seems to **speed up the training process** a lot. But in our case we **got some overfitting** and not the best general accuracy for Adam alone. 
-  - 'l1_l2' regulization: When combined with Adam we can see an increase of the test dataset accuracy (**generalization of our model**), but very similar training and validation losses.
+  - Elastic net regulization: When combined with Adam we can see an increase of the test dataset accuracy (**generalization of our model**), but very similar training and validation losses.
   - Applying a 50% dropout rate to the model, while using Adam, seems to **solve and avoid our overfitting problem**. This is very logical, because we always drop some parameters which fit the specific data points. 
  - **Final: Adam, 'l1_l2', Dropout: When combining all three optimizations, we get a model, which has a very high accuracy for the validation and our testing datasets and avoid overfitting.**
 
