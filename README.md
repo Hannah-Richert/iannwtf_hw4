@@ -2,7 +2,7 @@
 
 + Data preperation, hyperparameters and optimization techniques:
   - We took **60%** from our data as **training** and each **20%** for **validation and final testing**.
-  - We **normalized** the whole data.
+  - We **normalized** the dataset (the pandas dataframe).
   - We made the targets **binary** based on the **median** of all quality ratings.
   - We set the **learning_rate** to **0.05**.
   - We trained and analysed the models for **20 and 200 epochs**.
