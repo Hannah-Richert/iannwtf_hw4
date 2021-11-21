@@ -8,7 +8,7 @@ from classify import classify
 if __name__ == "__main__":
 
     # hyperparameters
-    epochs = 200
+    epochs = 20
     learning_rate = 0.05
 
     # lists vof visualization
