@@ -19,16 +19,16 @@ BE AWARE: Our dataset has only 1599 dataponts, it is very small. We tested all m
 + 20 training epochs:
 ![20_epochs_079167](https://user-images.githubusercontent.com/93341845/142773423-f82e2141-3220-4e0b-a58c-5f4f6c42c196.png)
 
-**Accuracy of the final model Adam_l1-l2_drop-0.5 on our unused and unseen test dataset: 0.79167
+
 + 200 training epochs:
   ![200_epochs](https://user-images.githubusercontent.com/93341845/142739086-7e495a31-193c-4fb9-a503-fed8ccf9e12d.png)
-
+**Accuracy of the final model Adam_l1-l2_drop-0.5 on our unused and unseen test_ds: 20epochs: 0.79167 / 200epochs: 0.76823**
 + Analyse and Interpretation: 
-  - SGD: Stochastic Gradient decent **does not easily find an optimum**. Our loss-surface might be very shallow with only very few valleys. Regularization and a 50% dropout does not help with it. If we would train for more epochs, we might get lucky and find the a local optimum. Then we would get a similar accuracy, as with Adam.
-  - Adam seems to **speed up the training process** a lot. But in our case we **got some overfitting** and not the best general accuracy for Adam alone. 
-  - Elastic net regulization: When combined with Adam we can see an increase of the test dataset accuracy (**generalization of our model**), but very similar training and validation losses.
+  - SGD: Stochastic Gradient decent **does not easily find an optimum**. Our loss-surface might be very shallow with only very few valleys. Regularization and a 50% dropout does not help with it. If we would train for more epochs, we could get lucky and find the a local optimum. Then we would get a similar accuracy, as with Adam.
+  - Adam seems to **speed up the training process** a lot. But in our case we **got some overfitting**.
+  - Elastic net regulization: When combined with Adam it does not solve our overfitting problem. But it slightly increasees our accuracy for the validation set.
   - Applying a 50% dropout rate to the model, while using Adam, seems to **solve and avoid our overfitting problem**. This is very logical, because we always drop some parameters which fit the specific data points. 
- - **Final: Adam, 'l1_l2', Dropout: When combining all three optimizations, we get a model, which has a very high accuracy for the validation and our testing datasets and avoid overfitting.**
+ - **Final Model - Adam, 'l1_l2' and Dropout: When combining all three optimizations, we get a model, which has a very high accuracy validation set and avoid overfitting. We tested the final model on our unseen and unused test_ds and received high accuracies as well ( run with 20 epochs: 0.79167 / 200 epochs: 0.76823)**
 
 Fazit: The greatest impact on the training process had the optimizer Adam, but Dropout and 'l1_l2' kernel regulization helped with the finetuning and to overfitting.
 
