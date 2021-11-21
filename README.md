@@ -10,7 +10,7 @@
   - We used first **SGD** and later the **Adam** as **optimizer** with their standart parameters.
   - We applied **"l1_l2"** kernel **regularization** to all layers (with standart parameters).
   - We applied **dropout** between all layers with a rate of **50%**.
-  - We plotted all resluts in a grid, seen below.
+  - We plotted all results in a grid, seen below.
 
 BE AWARE: Our dataset has only 1599 dataponts, it is very small. We tested all models with the exact same shuffled dataset, but instaltiated our layers with random weights and biases. Therefore the results are not steady and can vary.
 
