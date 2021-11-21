@@ -26,7 +26,7 @@ BE AWARE: Our dataset has only 1599 dataponts, it is very small. We tested all m
   - Adam seems to **speed up the training process** a lot. But in our case we **got some overfitting** and not the best general accuracy for Adam alone. 
   - 'l1_l2' regulization: When combined with Adam we can see an increase of the test dataset accuracy (**generalization of our model**), but very similar training and validation losses.
   - Applying a 50% dropout rate to the model, while using Adam, seems to **solve and avoid our overfitting problem**. This is very logical, because we always drop some parameters which fit the specific data points. 
- - **Final: Adam, 'l1_l2', Dropout: When combining all three optimizations, we get a model, which has a very high accuracy for the validation and our testing datasets and avoide overfitting.**
+ - **Final: Adam, 'l1_l2', Dropout: When combining all three optimizations, we get a model, which has a very high accuracy for the validation and our testing datasets and avoid overfitting.**
 
 Fazit: The most impact on the training process had the optimizer Adam, but Dropout and 'l1_l2' kernel regulization helped with the finetuning and to overfitting.
 
