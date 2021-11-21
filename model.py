@@ -17,7 +17,7 @@ class MyModel(tf.keras.Model):
 
         Args:
             kernel_regularizer: our regularizer, which will be applied to all layers
-            dropout: dropout_rate for intermediate outputs between the layers
+            dropout: dropout_rate for intermediate outputs between the layers (float)
     """
 
     super(MyModel, self).__init__()
@@ -44,7 +44,7 @@ class MyModel(tf.keras.Model):
       Results:
         output: the predicted output of our input data
     """
-    
+
     x = self.dense_h1(inputs)
     x = self.dense_h2(x)
     output = self.dense_out(x)

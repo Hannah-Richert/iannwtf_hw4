@@ -14,9 +14,9 @@ class MyDense(tf.keras.layers.Layer):
     """
     Constructs an fully connected layer.
       Args:
-        units: perceptrons of our layer
+        units: perceptrons of our layer (int)
         kernel_regularizer: Regularization method applied to our layer
-        dropout: dropout rate applied to our layer
+        dropout: dropout rate applied to our layer (float)
         activation: activation function of our layer
     """
 

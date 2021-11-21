@@ -9,7 +9,6 @@ def loading_data():
 
         Results:
             train_ds,test_ds,valid_ds: the preprocessed datasets
-            median: median of our dataframe
     """
 
     # load the data into a pandas dataframe from the given path
@@ -92,13 +91,13 @@ def train_step(model, input, target, loss_function, optimizer):
   Performs a forward and backward pass for  one dataponit of our training set
 
     Args:
-      model: our created MLP model
-      input: our input
-      target: our target
-      loss_funcion: function we used for calculating our loss
-      optimizer: our optimizer used for packpropagation
+      model: our created MLP model (MyModel object)
+      input: our input (tensor)
+      target: our target (tensor)
+      loss_funcion: function we used for calculating our loss (keras function)
+      optimizer: our optimizer used for packpropagation (keras function)
     Results:
-      loss: our calculated loss for the datapoint
+      loss: our calculated loss for the datapoint (float)
     """
 
   with tf.GradientTape() as tape:
@@ -124,12 +123,12 @@ def test(model, test_data, loss_function):
   performing a forward pass and calculating loss and accuracy
 
     Args:
-      model: our created MLP model
-      test_data: our preprocessed test dataset
-      loss_funcion: function we used for calculating our loss
+      model: our created MLP model (MyModel object)
+      test_data: our preprocessed test dataset (set of tuples with tensors)
+      loss_funcion: function we used for calculating our loss (keras function)
     Results:
-        loss: our mean loss for this epoch
-        accuracy: our mean accuracy for this epoch
+        loss: our mean loss for this epoch (float)
+        accuracy: our mean accuracy for this epoch (float)
   """
 
   # initializing lists for accuracys and loss
