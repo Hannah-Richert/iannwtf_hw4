@@ -8,7 +8,7 @@ from classify import classify
 if __name__ == "__main__":
 
     # hyperparameters
-    epochs = 20
+    epochs = 200
     learning_rate = 0.05
 
     # lists vof visualization
@@ -17,7 +17,6 @@ if __name__ == "__main__":
     train_losses = []
     valid_losses = []
     valid_accuracies = []
-    test_accuracies = []
 
     # getting our data
     train_ds,valid_ds,test_ds = loading_data()
@@ -36,11 +35,11 @@ if __name__ == "__main__":
         valid_losses.append(result[1])
         valid_accuracies.append(result[2])
 
-    # after adjusting our hyperparameters, checking the final models on our unseen test_ds
-    for model in trained_models:
-        _, accuracy = loss,accuracy = test(model,test_ds,tf.keras.losses.BinaryCrossentropy())
-        test_accuracies.append(accuracy.numpy())
+    # after training the models and adjusting our hyperparameters,
+    # testing the final model on our unseen test_ds
+    _, test_accuracy = loss,accuracy = test(trained_models[-1],test_ds,tf.keras.losses.BinaryCrossentropy())
+    print("The last model (Adam,l1_l2,Dropout-0.5) has a accuracy on our unseen test_ds of ",test_accuracy, ".")
 
     # visualize the losses and accuracies in a grid_plot
-    visualize(train_losses,valid_losses,valid_accuracies,test_accuracies)
+    visualize(train_losses,valid_losses,valid_accuracies)
     plt.show()

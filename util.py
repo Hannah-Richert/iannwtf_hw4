@@ -158,7 +158,7 @@ def test(model, test_data, loss_function):
   return loss, accuracy
 
 
-def visualize(train_losses,valid_losses,valid_accuracies, test_accuracies):
+def visualize(train_losses,valid_losses,valid_accuracies):
     """
     Displays the losses and accuracies from the different models in a plot-grid.
 
@@ -166,7 +166,6 @@ def visualize(train_losses,valid_losses,valid_accuracies, test_accuracies):
       train_losses = mean training losses per epoch
       valid_losses = mean testing losses per epoch
       valid_accuracies = mean accuracies (testing dataset) per epoch
-      test_accuracies = single mean accuracy for our unseen test_ds
     """
 
     titles = ["SGD","SGD_l1-l2","SGD_drop-0.5","SGD_l1-l2_drop-0.5","Adam","Adam_l1-l2","Adam_drop-0.5","Adam_l1-l2_drop-0.5",]
@@ -179,9 +178,10 @@ def visualize(train_losses,valid_losses,valid_accuracies, test_accuracies):
             axs[i,j].plot(train_losses[i*4+j])
             axs[i,j].plot(valid_losses[i*4+j])
             axs[i,j].plot(valid_accuracies[i*4+j])
+            last_accuracy = valid_accuracies[i*4+j][-1].numpy()
             axs[i,j].sharex(axs[0,0])
-            axs[i,j].set_title(titles[i*4+j]+" \nTestSet Accuracy: "+str(round(test_accuracies[i*4+j],4)))
+            axs[i,j].set_title(titles[i*4+j]+" \n Last Accuracy: "+str(round(last_accuracy,4)))
 
-    fig.legend([" Train_ds loss"," Valid_ds loss"," Accuracy"])
+    fig.legend([" Train_ds loss"," Valid_ds loss"," Valid_ds accuracy"])
     plt.xlabel("Training epoch")
     fig.tight_layout()
