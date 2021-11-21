@@ -35,7 +35,7 @@ if __name__ == "__main__":
         valid_losses.append(result[1])
         valid_accuracies.append(result[2])
 
-    # after training the models and adjusting our hyperparameters,
+    # after training the models and adjusting our hyperparameters, 
     # testing the final model on our unseen test_ds
     _, test_accuracy = loss,accuracy = test(trained_models[-1],test_ds,tf.keras.losses.BinaryCrossentropy())
     print("The last model (Adam,l1_l2,Dropout-0.5) has a accuracy on our unseen test_ds of ",test_accuracy, ".")
