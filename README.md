@@ -17,7 +17,9 @@ BE AWARE: Our dataset has only 1599 dataponts, it is very small. We tested all m
 # Results:
 
 + 20 training epochs:
-  ![20_epochs](https://user-images.githubusercontent.com/93341845/142739267-938a2ad9-3e1a-4d41-a9f8-94630c641a93.png)
+![20_epochs_079167](https://user-images.githubusercontent.com/93341845/142773423-f82e2141-3220-4e0b-a58c-5f4f6c42c196.png)
+
+**Accuracy of the final model Adam_l1-l2_drop-0.5 on our unused and unseen test dataset: 0.79167
 + 200 training epochs:
   ![200_epochs](https://user-images.githubusercontent.com/93341845/142739086-7e495a31-193c-4fb9-a503-fed8ccf9e12d.png)
 
