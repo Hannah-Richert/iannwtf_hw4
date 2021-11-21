@@ -20,8 +20,7 @@ BE AWARE: Our dataset has only 1599 dataponts, it is very small. We tested all m
 ![20_epochs_7865](https://user-images.githubusercontent.com/93341845/142777166-1669523f-799f-4a4f-9255-e9031d8395a7.png)
 
 
-
-+ Accuracy of the testing dataset for our final model (Adam_l1-l2_drop-0.5): 0.7865 
++ Accuracy on the test dataset of our final model (Adam_l1-l2_drop-0.5): 0.7865 
 + Analyse and Interpretation: 
   - **SGD:** Stochastic Gradient decent **does not easily find an optimum**. Our loss-surface might be very shallow with only very few valleys. Regularization and a 50% dropout does not help with it. If we would train for more epochs, we could get lucky and find the a local optimum. Then we would get a similar accuracy, as with Adam.
   - **Adam** seems to **speed up the training process** a lot. But in our case we **got some overfitting**. (training loss decreases, validation loss increases).
