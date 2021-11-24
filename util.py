@@ -20,7 +20,7 @@ def loading_data():
     # get the shape of the dataframe
     (rows,cols) = df.shape
 
-    # get the median of the normalized datasets
+    # get the median of the normalized dataset
     quality_median = df['quality'].median()
 
     # shuffle the dataset
@@ -70,12 +70,12 @@ def prepare_data(ds,target_median):
 
     Args:
       ds: the dataset we want to preprocess
-      target_median: medain of our target values for the whole data (not nessesarily ds)
+      target_median: median of all target values (not necessarily only from ds)
     Results:
       ds: preprocessed dataset
   """
 
-  # make the targets binary, threshhold is the median of our dataset
+  # make the targets binary, threshhold is the median of all targets (all data)
   ds = ds.map(lambda feature, target: (feature, make_binary(target,target_median)))
 
   # cast features and targets to float32
