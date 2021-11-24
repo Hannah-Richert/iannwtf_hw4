@@ -20,6 +20,9 @@ def loading_data():
     # get the shape of the dataframe
     (rows,cols) = df.shape
 
+    # get the median of the normalized datasets
+    quality_median = df['quality'].median()
+
     # shuffle the dataset
     df = df.sample(frac=1).reset_index(drop=True)
 
@@ -35,9 +38,10 @@ def loading_data():
     test_ds = remaining.skip(int(0.2*rows))
 
     # apply preprocessing to the datasets
-    train_ds = train_ds.apply(prepare_data)
-    test_ds = test_ds.apply(prepare_data)
-    valid_ds = valid_ds.apply(prepare_data)
+    train_ds = prepare_data(train_ds,quality_median)
+    test_ds = prepare_data(test_ds,quality_median)
+    valid_ds = prepare_data(valid_ds,quality_median)
+
 
     return train_ds,valid_ds,test_ds,
 
@@ -47,7 +51,7 @@ def make_binary(input,threshold):
   Makes our numerical tensor binary on the basis of our threshhold.
     Args:
         input: input tensor (single number)
-        threshold: our threshold
+        threshold: our threshold for the binary decision
     Results:
         output: an binary tensor
   """
@@ -60,18 +64,19 @@ def make_binary(input,threshold):
   return output
 
 
-def prepare_data(ds):
+def prepare_data(ds,target_median):
   """
   Preparing our data for our model.
 
     Args:
       ds: the dataset we want to preprocess
+      target_median: medain of our target values for the whole data (not nessesarily ds)
     Results:
       ds: preprocessed dataset
   """
 
   # make the targets binary, threshhold is the median of our dataset
-  ds = ds.map(lambda feature, target: (feature, make_binary(target,0.4507)))
+  ds = ds.map(lambda feature, target: (feature, make_binary(target,target_median)))
 
   # cast features and targets to float32
   ds = ds.map(lambda feature, target: (tf.cast(feature, tf.float32),tf.cast(target,tf.float32)))
